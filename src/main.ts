@@ -1,4 +1,7 @@
-// 单独引入 element plus 样式
+import 'normalize.css'
+
+// element plus 以组件 API 使用需要单独引入样式
+import 'element-plus/theme-chalk/base.css'
 import 'element-plus/theme-chalk/el-loading.css'
 import 'element-plus/theme-chalk/el-message.css'
 
@@ -6,7 +9,6 @@ import { createApp } from 'vue'
 import App from './App.vue'
 
 import router from '@/router'
-// import store from '@/store'
 import pinia from '@/store'
 
 import request from './service'
