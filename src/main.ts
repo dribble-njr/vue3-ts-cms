@@ -1,4 +1,5 @@
 import 'normalize.css'
+import './assets/css/index.less'
 
 // element plus 以组件 API 使用需要单独引入样式
 import 'element-plus/theme-chalk/base.css'
