@@ -6,21 +6,23 @@
       </el-form-item>
 
       <el-form-item label="密码" prop="password">
-        <el-input v-model="account.password" type="password" />
+        <el-input v-model="account.password" type="password" show-password />
       </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, defineExpose } from 'vue'
+import { reactive, ref } from 'vue'
 import { ElForm } from 'element-plus'
+import localCache from '@/utils/cache'
+import { accountLoginRequest } from '@/service/api/login'
 
 const formRef = ref<InstanceType<typeof ElForm> | null>(null)
 
 const account = reactive({
-  name: '',
-  password: ''
+  name: localCache.getCache('name') ?? '',
+  password: localCache.getCache('password') ?? ''
 })
 
 const rules = {
@@ -42,10 +44,21 @@ const rules = {
   ]
 }
 
-const login = () => {
-  formRef.value?.validate((isValid: boolean) => {
+const login = (isKeepPassword: boolean) => {
+  formRef.value?.validate(async (isValid: boolean) => {
     if (isValid) {
-      console.log('登录')
+      // 1. 判断记住密码
+      if (isKeepPassword) {
+        localCache.setCache('name', account.name)
+        localCache.setCache('password', account.password)
+      } else {
+        localCache.deleteCache('name')
+        localCache.deleteCache('password')
+      }
+
+      // 2. 登录验证
+      const res = await accountLoginRequest(account)
+      console.log(res)
     }
   })
 }
