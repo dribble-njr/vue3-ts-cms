@@ -16,7 +16,7 @@
 import { reactive, ref } from 'vue'
 import { ElForm } from 'element-plus'
 import localCache from '@/utils/cache'
-import { accountLoginRequest } from '@/service/api/login'
+import { useLogin } from '@/stores/login'
 
 const formRef = ref<InstanceType<typeof ElForm> | null>(null)
 
@@ -57,8 +57,8 @@ const login = (isKeepPassword: boolean) => {
       }
 
       // 2. 登录验证
-      const res = await accountLoginRequest(account)
-      console.log(res)
+      const loginHook = useLogin()
+      loginHook.accountLogin(account)
     }
   })
 }

@@ -8,6 +8,8 @@ import type {
 import { ElLoading, ElMessage } from 'element-plus'
 import { LoadingInstance } from 'element-plus/lib/components/loading/src/loading'
 
+import localCache from '@/utils/cache'
+
 const DEAFULT_LOADING = true
 
 interface RequestInterceptors {
@@ -54,7 +56,7 @@ class Request {
         }
 
         // 自动携带 token
-        const token = '11'
+        const token = localCache.getCache('token')
         if (token && config.headers) {
           config.headers.Authorization = `Bearer ${token}`
         }
