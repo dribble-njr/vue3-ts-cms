@@ -42,6 +42,20 @@ export const useLogin = defineStore('login', {
 
       // 跳到首页
       router.push('/home')
+    },
+    $loadLocalLogin() {
+      const token = localCache.getCache('token')
+      if (token) {
+        this.token = token
+      }
+      const userInfo = localCache.getCache('userInfo')
+      if (userInfo) {
+        this.userInfo = userInfo
+      }
+      const userMenu = localCache.getCache('userMenu')
+      if (userMenu) {
+        this.userMenu = userMenu
+      }
     }
   }
 })
