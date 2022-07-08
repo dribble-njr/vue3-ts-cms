@@ -11,8 +11,12 @@ import App from './App.vue'
 
 import router from '@/router'
 import pinia from '@/stores'
+import { globalRegister } from './global'
 import { useLogin } from '@/stores/login'
 
-createApp(App).use(router).use(pinia).mount('#app')
+const app = createApp(App)
+app.use(router).use(pinia).mount('#app')
 
+// 注册 element-plus-icons / other
+globalRegister(app)
 useLogin().$loadLocalLogin()

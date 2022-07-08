@@ -57,8 +57,8 @@ const login = (isKeepPassword: boolean) => {
       }
 
       // 2. 登录验证
-      const loginHook = useLogin()
-      loginHook.accountLogin(account)
+      const loginStore = useLogin()
+      loginStore.accountLogin(account)
     }
   })
 }

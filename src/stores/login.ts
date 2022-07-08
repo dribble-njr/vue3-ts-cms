@@ -18,7 +18,7 @@ export const useLogin = defineStore('login', {
     return {
       token: '',
       userInfo: null,
-      userMenu: []
+      userMenu: <any[]>[]
     }
   },
   getters: {},
