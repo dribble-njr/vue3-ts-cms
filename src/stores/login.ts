@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import router from '@/router'
 
 import localCache from '@/utils/cache'
+import { mapMenuToRoutes } from '@/utils/map-menus'
 import {
   accountLoginRequest,
   getUserInfoById,
@@ -56,6 +57,13 @@ export const useLogin = defineStore('login', {
       if (userMenu) {
         this.userMenu = userMenu
       }
+
+      // 动态添加路由
+      // 在这里做保证登录或者刷新界面后都能成功动态添加路由
+      const routes = mapMenuToRoutes(userMenu)
+      routes.forEach((route) => {
+        router.addRoute('Main', route)
+      })
     }
   }
 })

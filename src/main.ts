@@ -15,8 +15,10 @@ import { globalRegister } from './global'
 import { useLogin } from '@/stores/login'
 
 const app = createApp(App)
-app.use(router).use(pinia).mount('#app')
 
 // 注册 element-plus-icons / other
 globalRegister(app)
+app.use(pinia)
 useLogin().$loadLocalLogin()
+app.use(router)
+app.mount('#app')

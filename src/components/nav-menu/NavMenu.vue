@@ -2,17 +2,15 @@
   <div class="nav-menu">
     <div class="logo">
       <img class="img" src="~@/assets/img/logo.svg" alt="logo" />
-      <span class="title">Vue3 + TS CMS</span>
+      <span v-if="!props.isCollapse" class="title">Vue3 + TS CMS</span>
     </div>
     <el-menu
       default-active="2"
       class="el-menu-vertical"
-      :collapse="collapse"
+      :collapse="props.isCollapse"
       background-color="#0c2135"
       text-color="#b7bdc3"
       active-text-color="#0a60bd"
-      @open="handleOpen"
-      @close="handleClose"
     >
       <template v-for="item in userMenu" :key="item.id">
         <!-- 二级菜单 -->
@@ -25,7 +23,10 @@
               <span>{{ item.name }}</span>
             </template>
             <template v-for="subitem in item.children" :key="subitem.id">
-              <el-menu-item style="padding-left: 50px" :index="subitem.id + ''">
+              <el-menu-item
+                :index="subitem.id + ''"
+                @click="menuItemClick(subitem)"
+              >
                 <el-icon v-if="subitem.icon">
                   <component :is="formatIcon(subitem.icon)"></component>
                 </el-icon>
@@ -52,8 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 import { useLogin } from '@/stores/login'
+
+const props = defineProps({
+  isCollapse: {
+    type: Boolean,
+    default: Boolean
+  }
+})
 
 const formatIcon = (icon: string) => {
   return icon.slice(8)
@@ -61,12 +69,12 @@ const formatIcon = (icon: string) => {
 
 const loginStore = useLogin()
 const userMenu = loginStore.userMenu
-const collapse = ref(false)
-const handleOpen = function () {
-  console.log('handleOpen')
-}
-const handleClose = function () {
-  console.log('handleClose')
+
+const router = useRouter()
+const menuItemClick = (item: any) => {
+  router.push({
+    path: item.url ?? '/not-found'
+  })
 }
 </script>
 
@@ -97,26 +105,24 @@ const handleClose = function () {
     border-right: none;
   }
 
-  .el-submenu {
+  .el-sub-menu {
     background-color: #001529 !important;
-
     .el-menu-item {
+      padding-left: 50px !important;
       background-color: #0c2135 !important;
+    }
+    .el-menu-item:hover {
+      color: #fff !important; // 菜单
+    }
+
+    .el-menu-item.is-active {
+      color: #fff !important;
+      background-color: #0a60bd !important;
     }
   }
 
   ::v-deep .el-submenu__title {
     background-color: #001529 !important;
-  }
-
-  // hover 高亮
-  .el-menu-item:hover {
-    color: #fff !important; // 菜单
-  }
-
-  .el-menu-item.is-active {
-    color: #fff !important;
-    background-color: #0a60bd !important;
   }
 }
 
