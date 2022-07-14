@@ -6,10 +6,20 @@ import {
   Setting,
   ChatLineRound,
   Fold,
-  Expand
+  Expand,
+  ArrowDown
 } from '@element-plus/icons-vue'
 
-const icons = [Edit, Setting, Monitor, Goods, ChatLineRound, Fold, Expand]
+const icons = [
+  Edit,
+  Setting,
+  Monitor,
+  Goods,
+  ChatLineRound,
+  Fold,
+  Expand,
+  ArrowDown
+]
 
 export default function (app: App) {
   for (const icon of icons) {

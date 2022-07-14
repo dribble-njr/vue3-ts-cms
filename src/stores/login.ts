@@ -40,9 +40,10 @@ export const useLogin = defineStore('login', {
       const userMenuResponse = await getUserMenuById(id)
       this.userMenu = userMenuResponse.data
       localCache.setCache('userMenu', this.userMenu)
+      this._registerDynamicRoutes(this.userMenu)
 
       // 跳到首页
-      router.push('/home')
+      router.push('/main')
     },
     $loadLocalLogin() {
       const token = localCache.getCache('token')
@@ -56,8 +57,10 @@ export const useLogin = defineStore('login', {
       const userMenu = localCache.getCache('userMenu')
       if (userMenu) {
         this.userMenu = userMenu
+        this._registerDynamicRoutes(userMenu)
       }
-
+    },
+    _registerDynamicRoutes(userMenu: any[]) {
       // 动态添加路由
       // 在这里做保证登录或者刷新界面后都能成功动态添加路由
       const routes = mapMenuToRoutes(userMenu)

@@ -5,7 +5,7 @@
       <span v-if="!props.isCollapse" class="title">Vue3 + TS CMS</span>
     </div>
     <el-menu
-      default-active="2"
+      :default-active="defaultMenu"
       class="el-menu-vertical"
       :collapse="props.isCollapse"
       background-color="#0c2135"
@@ -53,8 +53,9 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { useLogin } from '@/stores/login'
+import { mapPathToDefaultMenu } from '@/utils/map-menus'
 
 const props = defineProps({
   isCollapse: {
@@ -67,10 +68,19 @@ const formatIcon = (icon: string) => {
   return icon.slice(8)
 }
 
+// pinia
 const loginStore = useLogin()
 const userMenu = loginStore.userMenu
 
+// router
 const router = useRouter()
+const route = useRoute()
+const currentPath = route.path
+
+// data
+const defaultMenu = mapPathToDefaultMenu(userMenu, currentPath).id + ''
+
+// event
 const menuItemClick = (item: any) => {
   router.push({
     path: item.url ?? '/not-found'
