@@ -7,7 +7,8 @@ import {
   ChatLineRound,
   Fold,
   Expand,
-  ArrowDown
+  ArrowDown,
+  Delete
 } from '@element-plus/icons-vue'
 
 const icons = [
@@ -18,7 +19,8 @@ const icons = [
   ChatLineRound,
   Fold,
   Expand,
-  ArrowDown
+  ArrowDown,
+  Delete
 ]
 
 export default function (app: App) {

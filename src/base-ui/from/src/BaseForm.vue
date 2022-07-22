@@ -19,7 +19,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   :show-password="item.type === 'password'"
-                  v-model="formData[`${item.field}`]"
+                  :modelValue="modelValue[`${item.field}`]"
+                  @update:modelValue="updateValue(item.field, $event)"
                 />
               </template>
               <template v-else-if="item.type === 'select'">
@@ -27,7 +28,8 @@
                   :placeholder="item.placeholder"
                   v-bind="item.otherOptions"
                   style="width: 100%"
-                  v-model="formData[`${item.field}`]"
+                  :modelValue="modelValue[`${item.field}`]"
+                  @update:modelValue="updateValue(item.field, $event)"
                 >
                   <el-option
                     v-for="option in item.options"
@@ -43,7 +45,8 @@
                 <el-date-picker
                   style="width: 100%"
                   v-bind="item.otherOptions"
-                  v-model="formData[`${item.field}`]"
+                  :modelValue="modelValue[`${item.field}`]"
+                  @update:modelValue="updateValue(item.field, $event)"
                 ></el-date-picker>
               </template>
             </el-form-item>
@@ -58,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, ref, watch } from 'vue'
+import { PropType } from 'vue'
 import { FormItem } from '../types'
 
 const props = defineProps({
@@ -92,20 +95,30 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const formData = ref({
-  ...props.modelValue
-})
-watch(
-  formData,
-  (newValue) => {
-    console.log(newValue)
+// 1.
+// 子组件不能直接修改父组件传过来的数据 modelValue
+// 否则违背单向数据流
+// 因此用中间数据接收
+// const formData = ref({
+//   ...props.modelValue
+// })
+// // const formData = Object.assign({}, props.modelValue)
+// watch(
+//   formData,
+//   (newValue) => {
+//     console.log(newValue)
 
-    emit('update:modelValue', newValue)
-  },
-  {
-    deep: true
-  }
-)
+//     emit('update:modelValue', newValue)
+//   },
+//   {
+//     deep: true
+//   }
+// )
+
+// 2. 修改默认@update:modelValue方法
+const updateValue = (field: string, value: any) => {
+  emit('update:modelValue', { ...props.modelValue, [field]: value })
+}
 </script>
 
 <style scoped>

@@ -1,8 +1,8 @@
 type FormType = 'input' | 'password' | 'select' | 'datepicker'
 
 export interface FormItem {
-  field: string
-  type: FormType
+  field: string // 字段
+  type: FormType // 表单类型
   label: string
   rules?: any[]
   placeholder?: any

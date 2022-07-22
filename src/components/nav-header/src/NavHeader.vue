@@ -19,7 +19,12 @@
           </template>
         </el-breadcrumb>
       </div>
-      <div>
+      <div class="right">
+        <el-button @click="changeLang" text style="margin-right: 10px">
+          <template v-if="lang == 'zh-cn'">English</template>
+          <template v-else>中文</template>
+        </el-button>
+
         <el-dropdown>
           <span class="el-dropdown-link">
             {{ name }}
@@ -43,6 +48,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useLogin } from '@/stores/login'
+import { useLang } from '@/stores/lang'
 import { useRoute } from 'vue-router'
 import { mapPathToBreadcrumb } from '@/utils/map-menus'
 
@@ -62,6 +68,16 @@ const breadcrumbs = computed(() => {
 
   return mapPathToBreadcrumb(userMenu, currentPath)
 })
+
+// element plus 语言
+const langStore = useLang()
+const lang = computed(() => langStore.lang)
+const changeLang = function () {
+  console.log('改变语言')
+
+  langStore.changeLang()
+  console.log(lang.value, langStore.lang)
+}
 
 // 用户
 const loginStore = useLogin()
@@ -84,11 +100,13 @@ const name = loginStore.userInfo ? loginStore.userInfo['name'] : ''
     align-items: center;
     flex: 1;
     padding: 0 20px;
-
-    .el-dropdown-link {
-      cursor: pointer;
+    .right {
       display: flex;
-      align-items: center;
+      .el-dropdown-link {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+      }
     }
   }
 }
