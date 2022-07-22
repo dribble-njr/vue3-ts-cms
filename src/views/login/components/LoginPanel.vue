@@ -2,19 +2,19 @@
   <div class="login-panel">
     <h1 class="title">后台管理系统</h1>
 
-    <el-tabs type="border-card" stretch>
-      <el-tab-pane label="User">
+    <el-tabs type="border-card" stretch v-model="currentTab">
+      <el-tab-pane label="User" name="account">
         <template #label>
           <span>账号登录</span>
         </template>
         <login-account ref="accountRef"></login-account>
       </el-tab-pane>
 
-      <el-tab-pane label="Config">
+      <el-tab-pane label="Config" name="phone">
         <template #label>
           <span>手机登录</span>
         </template>
-        <login-phone></login-phone>
+        <login-phone ref="phoneRef"></login-phone>
       </el-tab-pane>
     </el-tabs>
 
@@ -35,17 +35,23 @@ import { ref } from 'vue'
 import LoginAccount from './LoginAccount.vue'
 import LoginPhone from './LoginPhone.vue'
 
-const isKeepPassword = ref(false)
+const currentTab = ref('account')
+const isKeepPassword = ref(true)
 const accountRef = ref<InstanceType<typeof LoginAccount> | null>(null)
+const phoneRef = ref<InstanceType<typeof LoginPhone> | null>(null)
 
 const login = () => {
-  accountRef.value?.login()
+  if (currentTab.value === 'account') {
+    accountRef.value?.login(isKeepPassword.value)
+  } else {
+    phoneRef.value?.login()
+  }
 }
 </script>
 
 <style lang="less" scoped>
 .login-panel {
-  // margin-top: -200px;
+  margin-top: -100px;
   width: 320px;
 
   .title {

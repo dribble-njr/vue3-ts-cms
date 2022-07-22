@@ -22,6 +22,14 @@ const phone = reactive({
   num: '',
   code: ''
 })
+
+const login = () => {
+  console.log('手机登录')
+}
+
+defineExpose({
+  login
+})
 </script>
 
 <style lang="less" scoped>
