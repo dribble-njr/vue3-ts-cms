@@ -6,17 +6,26 @@
       v-bind="tableConfig"
       v-model:page="pageInfo"
     >
+      <!-- header slot -->
       <template #header-handler>
         <el-button type="primary">新建用户</el-button>
         <el-button type="primary">刷新</el-button>
       </template>
+
+      <!-- table column common slot -->
       <template #status="scope">
         <el-button
           plain
           size="small"
-          :type="scope.row.enable ? 'success' : 'danger'"
+          :type="
+            scope.row.enable
+              ? 'success'
+              : scope.row.status
+              ? 'success'
+              : 'danger'
+          "
         >
-          {{ scope.row.enable ? '启用' : '禁用' }}
+          {{ scope.row.enable ? '启用' : scope.row.status ? '启用' : '禁用' }}
         </el-button>
       </template>
 
@@ -39,6 +48,16 @@
             删除
           </el-button>
         </div>
+      </template>
+
+      <template #image="scope">
+        <el-image
+          style="width: 50px; height: 100%"
+          :src="scope.row.imgUrl"
+          :preview-src-list="[scope.row.imgUrl]"
+          fit="cover"
+          preview-teleported="true"
+        ></el-image>
       </template>
     </base-table>
   </div>

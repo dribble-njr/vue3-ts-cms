@@ -18,7 +18,7 @@ export async function usePageSearch() {
 
   // 分页改变
   const handlePageChange = () => {
-    handleQuery(pageSearchRef.value.formData)
+    handleQuery(pageSearchRef?.value?.formData)
   }
 
   return {
