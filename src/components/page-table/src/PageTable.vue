@@ -1,9 +1,10 @@
 <template>
   <div class="page-table">
     <base-table
-      :tableData="tableData"
-      :tableCount="tableCount"
+      :tableData="pageList"
+      :tableCount="pageCount"
       v-bind="tableConfig"
+      v-model:page="pageInfo"
     >
       <template #header-handler>
         <el-button type="primary">新建用户</el-button>
@@ -44,23 +45,55 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import {
+  defineProps,
+  defineExpose,
+  defineEmits,
+  ref,
+  computed,
+  watch
+} from 'vue'
+
+import { getPageList } from '@/service/api/system'
 
 import BaseTable from '@/base-ui/table'
 
-defineProps({
-  tableData: {
-    type: Array,
-    required: true
-  },
-  tableCount: {
-    type: Number,
-    default: 0
-  },
+const props = defineProps({
   tableConfig: {
     type: Object,
     required: true
+  },
+  pageUrl: {
+    type: String,
+    required: true
   }
+})
+
+const emit = defineEmits(['handlePageChange'])
+
+// 用户列表数据
+const pageData = ref()
+// 分页信息
+const pageInfo = ref({ currentPage: 1, pageSize: 5 })
+watch(pageInfo, () => {
+  emit('handlePageChange')
+})
+
+const getPageData = async (queryInfo?: any) => {
+  const { data } = await getPageList(props.pageUrl, {
+    offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
+    size: pageInfo.value.pageSize,
+    ...queryInfo
+  })
+  pageData.value = data
+}
+
+await getPageData()
+const pageList = computed(() => pageData.value?.list)
+const pageCount = computed(() => pageData.value?.totalCount)
+
+defineExpose({
+  getPageData
 })
 </script>
 

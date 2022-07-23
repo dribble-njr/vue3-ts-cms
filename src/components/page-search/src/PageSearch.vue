@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, defineEmits } from 'vue'
+import { defineProps, ref, defineEmits, defineExpose } from 'vue'
 import BaseForm from '@/base-ui/from/src/BaseForm.vue'
 
 const props = defineProps({
@@ -44,9 +44,10 @@ const resetForm = () => {
 
 // 搜索
 const queryClick = () => {
-  console.log('搜索')
   emit('queryBtnClick', formData.value)
 }
+
+defineExpose({ formData })
 </script>
 
 <style scoped>

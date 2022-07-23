@@ -1,14 +1,16 @@
 <template>
   <div class="user-manage">
     <page-search
+      ref="pageSearchRef"
       :searchFormConfig="searchFormConfig"
       @resetBtnClick="handleReset"
       @queryBtnClick="handleQuery"
     />
     <page-table
-      :tableData="userList"
-      :tableCount="userCount"
+      ref="pageTableRef"
+      pageUrl="/users/list"
       :tableConfig="tableConfig"
+      @handlePageChange="handlePageChange"
     ></page-table>
   </div>
 </template>
@@ -22,17 +24,13 @@ import { usePageSearch } from '@/hooks/usePageSearch'
 import { searchFormConfig } from './config/search.config' // 搜索表单配置
 import { tableConfig } from './config/table.config' // 表格配置
 
-// const {
-//   pageList: userList,
-//   handleReset,
-//   handleQuery
-// } = await usePageSearch('/users/list')
 const {
-  pageList: userList,
-  pageCount: userCount,
+  pageTableRef,
+  pageSearchRef,
   handleReset,
-  handleQuery
-} = await usePageSearch('/users/list')
+  handleQuery,
+  handlePageChange
+} = await usePageSearch()
 </script>
 
 <style scoped></style>

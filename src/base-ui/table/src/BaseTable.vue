@@ -35,13 +35,13 @@
     <div class="footer">
       <slot name="footer">
         <el-pagination
-          v-model:currentPage="currentPage4"
-          v-model:page-size="pageSize4"
-          :page-sizes="[10, 20, 30, 40]"
+          :page-sizes="[5, 10, 20, 40]"
+          :page-size="page.pageSize"
+          @size-change="handleSizeChange"
+          :current-page="page.currentPage"
+          @current-change="handleCurrentChange"
           layout="total, sizes, prev, pager, next, jumper"
           :total="tableCount"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
         />
       </slot>
     </div>
@@ -51,7 +51,7 @@
 <script setup lang="ts">
 import { defineProps, PropType } from 'vue'
 
-defineProps({
+const props = defineProps({
   title: {
     type: String
   },
@@ -72,13 +72,26 @@ defineProps({
   showSelect: {
     type: Boolean,
     default: false
+  },
+  page: {
+    type: Object,
+    default: () => ({ currentPage: 0, pageSize: 10 })
   }
 })
 
+const emit = defineEmits(['selectionChange', 'update:page'])
+
 // 选中抛出事件
-const emit = defineEmits(['selectionChange'])
 const handleSelectionChange = (value: any) => {
   emit('selectionChange', value)
+}
+
+// 分页抛出事件
+const handleSizeChange = (pageSize: number) => {
+  emit('update:page', { ...props.page, pageSize })
+}
+const handleCurrentChange = (currentPage: number) => {
+  emit('update:page', { ...props.page, currentPage })
 }
 </script>
 

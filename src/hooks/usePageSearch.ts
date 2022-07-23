@@ -1,38 +1,31 @@
-import { ref, computed } from 'vue'
-import { getPageList } from '@/service/api/system'
+import { ref } from 'vue'
+import PageTable from '@/components/page-table'
+import PageSearch from '@/components/page-search'
 
-export async function usePageSearch(url: string) {
-  // 用户列表数据
-  const pageData = ref()
-  // let pageList = null
-  // let pageCount = null
-  const getPageData = async (queryInfo?: any) => {
-    const { data } = await getPageList(url, {
-      offset: 0,
-      size: 100,
-      ...queryInfo
-    })
-    pageData.value = data
-  }
-
-  await getPageData()
-  const pageList = computed(() => pageData.value?.list)
-  const pageCount = computed(() => pageData.value?.totalCount)
+export async function usePageSearch() {
+  const pageTableRef = ref<InstanceType<typeof PageTable>>()
+  const pageSearchRef = ref<InstanceType<typeof PageSearch>>()
 
   // 重置
   const handleReset = () => {
-    getPageData()
+    pageTableRef.value.getPageData()
   }
 
   // 搜索
   const handleQuery = (queryInfo: any) => {
-    getPageData(queryInfo)
+    pageTableRef.value.getPageData(queryInfo)
+  }
+
+  // 分页改变
+  const handlePageChange = () => {
+    handleQuery(pageSearchRef.value.formData)
   }
 
   return {
-    pageList,
-    pageCount,
+    pageTableRef,
+    pageSearchRef,
     handleReset,
-    handleQuery
+    handleQuery,
+    handlePageChange
   }
 }

@@ -1,14 +1,16 @@
 <template>
   <div class="role-manage">
     <page-search
+      ref="pageSearchRef"
       :searchFormConfig="searchFormConfig"
       @resetBtnClick="handleReset"
       @queryBtnClick="handleQuery"
     />
     <page-table
-      :tableData="roleList"
-      :tableCount="roleCount"
+      ref="pageTableRef"
+      pageUrl="/role/list"
       :tableConfig="tableConfig"
+      @handlePageChange="handlePageChange"
     ></page-table>
   </div>
 </template>
@@ -22,17 +24,13 @@ import { usePageSearch } from '@/hooks/usePageSearch'
 import { searchFormConfig } from './config/search.config' // 搜索表单配置
 import { tableConfig } from './config/table.config' // 表格配置
 
-// const {
-//   pageList: roleList,
-//   handleReset,
-//   handleQuery
-// } = await usePageSearch('/role/list')
 const {
-  pageList: roleList,
-  pageCount: roleCount,
+  pageTableRef,
+  pageSearchRef,
   handleReset,
-  handleQuery
-} = await usePageSearch('/role/list')
+  handleQuery,
+  handlePageChange
+} = await usePageSearch()
 </script>
 
 <style scoped></style>
