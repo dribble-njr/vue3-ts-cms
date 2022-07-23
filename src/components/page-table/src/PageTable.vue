@@ -1,6 +1,10 @@
 <template>
   <div class="page-table">
-    <base-table :tableData="tableData" v-bind="tableConfig">
+    <base-table
+      :tableData="tableData"
+      :tableCount="tableCount"
+      v-bind="tableConfig"
+    >
       <template #header-handler>
         <el-button type="primary">新建用户</el-button>
         <el-button type="primary">刷新</el-button>
@@ -48,6 +52,10 @@ defineProps({
   tableData: {
     type: Array,
     required: true
+  },
+  tableCount: {
+    type: Number,
+    default: 0
   },
   tableConfig: {
     type: Object,

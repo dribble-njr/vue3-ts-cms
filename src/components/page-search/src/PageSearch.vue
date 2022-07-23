@@ -5,7 +5,7 @@
       <template #footer>
         <div class="btns">
           <el-button @click="resetForm">重置</el-button>
-          <el-button type="primary">搜索</el-button>
+          <el-button type="primary" @click="queryClick">搜索</el-button>
         </div>
       </template>
     </base-form>
@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref } from 'vue'
+import { defineProps, ref, defineEmits } from 'vue'
 import BaseForm from '@/base-ui/from/src/BaseForm.vue'
 
 const props = defineProps({
@@ -22,6 +22,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const emit = defineEmits(['resetBtnClick', 'queryBtnClick'])
 
 // 初始化表单数据
 const formItems = props.searchFormConfig?.formItems ?? []
@@ -37,6 +39,13 @@ const resetForm = () => {
   //   formData.value[`${key}`] = formOriginData[key]
   // }
   formData.value = formOriginData
+  emit('resetBtnClick')
+}
+
+// 搜索
+const queryClick = () => {
+  console.log('搜索')
+  emit('queryBtnClick', formData.value)
 }
 </script>
 
