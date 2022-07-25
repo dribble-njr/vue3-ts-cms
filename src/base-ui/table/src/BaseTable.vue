@@ -8,7 +8,11 @@
         </div>
       </slot>
     </div>
-    <el-table :data="tableData" @selection-change="handleSelectionChange">
+    <el-table
+      :data="tableData"
+      @selection-change="handleSelectionChange"
+      v-bind="childrenProps"
+    >
       <el-table-column
         type="selection"
         align="center"
@@ -76,6 +80,10 @@ const props = defineProps({
   page: {
     type: Object,
     default: () => ({ currentPage: 0, pageSize: 10 })
+  },
+  childrenProps: {
+    type: Object,
+    default: () => ({})
   }
 })
 

@@ -104,12 +104,16 @@ const getPageData = async (queryInfo?: any) => {
     size: pageInfo.value.pageSize,
     ...queryInfo
   })
+  console.log(data)
+
   pageData.value = data
 }
 
 await getPageData()
 const pageList = computed(() => pageData.value?.list)
-const pageCount = computed(() => pageData.value?.totalCount)
+const pageCount = computed(
+  () => pageData.value?.totalCount ?? pageData.value?.list.length
+)
 
 defineExpose({
   getPageData
