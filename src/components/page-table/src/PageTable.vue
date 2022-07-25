@@ -75,7 +75,6 @@ import {
 import { getPageList } from '@/service/api/system'
 
 import BaseTable from '@/base-ui/table'
-import { property } from 'lodash'
 
 const props = defineProps({
   tableConfig: {
