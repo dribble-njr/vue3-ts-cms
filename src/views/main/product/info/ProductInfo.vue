@@ -11,7 +11,23 @@
       pageUrl="/goods/list"
       :tableConfig="tableConfig"
       @handlePageChange="handlePageChange"
-    ></page-table>
+    >
+      <template #oldPrice="scope">
+        {{ '￥' + scope.row.oldPrice }}
+      </template>
+      <template #newPrice="scope">
+        {{ '￥' + scope.row.newPrice }}
+      </template>
+      <template #image="scope">
+        <el-image
+          style="width: 50px; height: 100%"
+          :src="scope.row.imgUrl"
+          :preview-src-list="[scope.row.imgUrl]"
+          fit="cover"
+          preview-teleported
+        ></el-image>
+      </template>
+    </page-table>
   </div>
 </template>
 

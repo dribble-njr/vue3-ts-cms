@@ -50,14 +50,13 @@
         </div>
       </template>
 
-      <template #image="scope">
-        <el-image
-          style="width: 50px; height: 100%"
-          :src="scope.row.imgUrl"
-          :preview-src-list="[scope.row.imgUrl]"
-          fit="cover"
-          preview-teleported="true"
-        ></el-image>
+      <!-- 动态插入其他插槽 -->
+      <template
+        v-for="item in otherSlots"
+        :key="item.prop"
+        #[item.slotName]="scope"
+      >
+        <slot :name="item.slotName" :row="scope.row"></slot>
       </template>
     </base-table>
   </div>
@@ -76,6 +75,7 @@ import {
 import { getPageList } from '@/service/api/system'
 
 import BaseTable from '@/base-ui/table'
+import { property } from 'lodash'
 
 const props = defineProps({
   tableConfig: {
@@ -98,6 +98,7 @@ watch(pageInfo, () => {
   emit('handlePageChange')
 })
 
+// 获取表格数据
 const getPageData = async (queryInfo?: any) => {
   const { data } = await getPageList(props.pageUrl, {
     offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
@@ -113,6 +114,16 @@ const pageCount = computed(() => pageData.value?.totalCount)
 
 defineExpose({
   getPageData
+})
+
+// 计算其他插槽
+const otherSlots = props.tableConfig?.propList.filter((item: any) => {
+  if (!item.slotName) return false
+  if (item.slotName === 'status') return false
+  if (item.slotName === 'createAt') return false
+  if (item.slotName === 'updateAt') return false
+  if (item.slotName === 'handler') return false
+  return true
 })
 </script>
 
