@@ -37,13 +37,19 @@
         {{ $filters.formatTime(scope.row.updateAt) }}
       </template>
 
-      <template #handler>
+      <template #handler="scope">
         <div class="hanle-btns">
           <el-button v-if="isUpdate" size="small" type="primary" text>
             <el-icon><Edit /></el-icon>
             编辑
           </el-button>
-          <el-button v-if="isDelete" size="small" type="primary" text>
+          <el-button
+            @click="handleDelete(scope.row)"
+            v-if="isDelete"
+            size="small"
+            type="primary"
+            text
+          >
             <el-icon><Delete /></el-icon>
             删除
           </el-button>
@@ -72,7 +78,7 @@ import {
   watch
 } from 'vue'
 
-import { getPageList } from '@/service/api/system'
+import { getPageList, deletePageData } from '@/service/api/system'
 import { usePermission } from '@/hooks/usePermission'
 
 import BaseTable from '@/base-ui/table'
@@ -138,6 +144,14 @@ const otherSlots = props.tableConfig?.propList.filter((item: any) => {
   if (item.slotName === 'handler') return false
   return true
 })
+
+// 删除、编辑、新建
+const handleDelete = async (item: any) => {
+  console.log(item)
+  const url = `/${props.pageName}/${item.id}`
+  await deletePageData(url)
+  await getPageData()
+}
 </script>
 
 <style scoped>

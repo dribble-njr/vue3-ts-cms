@@ -1,13 +1,9 @@
 import request from '../index'
+import { Data } from '../types'
 
 interface Account {
   name: string
   password: string
-}
-
-interface Data<T = any> {
-  code: number
-  data: T
 }
 
 interface LoginResult {
