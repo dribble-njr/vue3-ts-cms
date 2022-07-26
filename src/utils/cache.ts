@@ -5,7 +5,12 @@ interface DataType {
 }
 
 class LocalCache {
-  setCache(key: string, value: any, expire: number = 24 * 60 * 60) {
+  setCache(
+    key: string,
+    value: any,
+    type = 'localStorage',
+    expire = 24 * 60 * 60
+  ) {
     expire = expire * 1000
 
     const data: DataType = {
@@ -14,14 +19,22 @@ class LocalCache {
       expire
     }
 
-    window.localStorage.setItem(key, JSON.stringify(data))
+    // fix ts 7015
+    // https://stackoverflow.com/questions/42193262/
+    // element-implicitly-has-an-any-type-because-type-window-has-no-index-signatur
+    ;(window as any)[type].setItem(key, JSON.stringify(data))
   }
 
   getCache(key: string) {
     let data: DataType
+    let type: string
 
     if (window.localStorage.getItem(key)) {
       data = JSON.parse(window.localStorage.getItem(key) as string)
+      type = 'localStorage'
+    } else if (window.sessionStorage.getItem(key)) {
+      data = JSON.parse(window.sessionStorage.getItem(key) as string)
+      type = 'sessionStorage'
     } else {
       return null
     }
@@ -29,21 +42,29 @@ class LocalCache {
     const nowTime = Date.now()
     if (data.expire < nowTime - data.time) {
       // 过期直接删除
-      this.deleteCache(key)
+      this.deleteCache(key, type)
       return null
     } else {
       // 未过期使用则自动续期
-      this.setCache(key, data.value)
+      this.setCache(key, data.value, type, data.expire)
       return data.value
     }
   }
 
-  deleteCache(key: string) {
-    window.localStorage.removeItem(key)
+  deleteCache(key: string, type = 'localStorage') {
+    if (type == 'localStorage') {
+      window.localStorage.removeItem(key)
+    } else {
+      window.sessionStorage.removeItem(key)
+    }
   }
 
-  clearCache() {
-    window.localStorage.clear()
+  clearCache(type = 'localStorage') {
+    if (type == 'localStorage') {
+      window.localStorage.clear()
+    } else {
+      window.sessionStorage.clear()
+    }
   }
 }
 
