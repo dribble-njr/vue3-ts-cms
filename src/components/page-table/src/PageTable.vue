@@ -80,6 +80,7 @@ import {
 
 import { getPageList, deletePageData } from '@/service/api/system'
 import { usePermission } from '@/hooks/usePermission'
+import { useSystem } from '@/stores/system'
 
 import BaseTable from '@/base-ui/table'
 
@@ -146,11 +147,12 @@ const otherSlots = props.tableConfig?.propList.filter((item: any) => {
 })
 
 // 删除、编辑、新建
+const systemStore = useSystem()
+
 const handleDelete = async (item: any) => {
-  console.log(item)
   const url = `/${props.pageName}/${item.id}`
   await deletePageData(url)
-  await getPageData()
+  await getPageData(systemStore.queryInfo)
 }
 </script>
 

@@ -13,7 +13,10 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, ref, defineEmits, defineExpose } from 'vue'
+import { defineProps, ref, defineEmits, defineExpose, watch } from 'vue'
+
+import { useSystem } from '@/stores/system'
+
 import BaseForm from '@/base-ui/from/src/BaseForm.vue'
 
 const props = defineProps({
@@ -47,6 +50,11 @@ const queryClick = () => {
   emit('queryBtnClick', formData.value)
 }
 
+const systemStore = useSystem()
+watch(formData, () => {
+  systemStore.setQueryInfo(formData.value)
+  console.log(systemStore.queryInfo)
+})
 defineExpose({ formData })
 </script>
 

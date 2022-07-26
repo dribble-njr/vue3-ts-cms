@@ -3,17 +3,12 @@ import { defineStore } from 'pinia'
 export const useSystem = defineStore('system', {
   state: () => {
     return {
-      userList: <any[]>[],
-      userCount: 0,
-      roleList: <any[]>[],
-      roleCount: 0
+      queryInfo: <any>null
     }
   },
-  getters: {},
   actions: {
-    // async getPageList(payload: any) {
-    //   // const pageListResponse = await getPageListData(payload.url, payload.query)
-    //   return pageListResponse.data
-    // }
+    setQueryInfo(payload: any) {
+      this.queryInfo = payload
+    }
   }
 })
