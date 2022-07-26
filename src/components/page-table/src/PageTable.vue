@@ -8,7 +8,7 @@
     >
       <!-- header slot -->
       <template #header-handler>
-        <el-button type="primary">新建用户</el-button>
+        <el-button v-if="isCreate" type="primary">新建</el-button>
         <el-button type="primary">刷新</el-button>
       </template>
 
@@ -39,11 +39,11 @@
 
       <template #handler>
         <div class="hanle-btns">
-          <el-button size="small" type="primary" text>
+          <el-button v-if="isUpdate" size="small" type="primary" text>
             <el-icon><Edit /></el-icon>
             编辑
           </el-button>
-          <el-button size="small" type="primary" text>
+          <el-button v-if="isDelete" size="small" type="primary" text>
             <el-icon><Delete /></el-icon>
             删除
           </el-button>
@@ -73,6 +73,7 @@ import {
 } from 'vue'
 
 import { getPageList } from '@/service/api/system'
+import { usePermission } from '@/hooks/usePermission'
 
 import BaseTable from '@/base-ui/table'
 
@@ -81,13 +82,22 @@ const props = defineProps({
     type: Object,
     required: true
   },
-  pageUrl: {
+  pageName: {
     type: String,
     required: true
   }
 })
 
 const emit = defineEmits(['handlePageChange'])
+
+// 请求地址
+const pageUrl = `/${props.pageName}/list`
+
+// 获取操作权限
+const isCreate = usePermission(props.pageName, 'create')
+const isUpdate = usePermission(props.pageName, 'update')
+const isDelete = usePermission(props.pageName, 'delete')
+const isQuery = usePermission(props.pageName, 'query')
 
 // 用户列表数据
 const pageData = ref()
@@ -99,12 +109,12 @@ watch(pageInfo, () => {
 
 // 获取表格数据
 const getPageData = async (queryInfo?: any) => {
-  const { data } = await getPageList(props.pageUrl, {
+  if (!isQuery) return
+  const { data } = await getPageList(pageUrl, {
     offset: (pageInfo.value.currentPage - 1) * pageInfo.value.pageSize,
     size: pageInfo.value.pageSize,
     ...queryInfo
   })
-  console.log(data)
 
   pageData.value = data
 }

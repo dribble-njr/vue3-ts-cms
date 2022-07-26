@@ -8,7 +8,7 @@
     />
     <page-table
       ref="pageTableRef"
-      pageUrl="/goods/list"
+      pageName="goods"
       :tableConfig="tableConfig"
       @handlePageChange="handlePageChange"
     >

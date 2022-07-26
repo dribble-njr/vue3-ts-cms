@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import router from '@/router'
 
 import localCache from '@/utils/cache'
-import { mapMenuToRoutes } from '@/utils/map-menus'
+import { mapMenuToRoutes, mapMenuToPermission } from '@/utils/map-menus'
 import {
   accountLoginRequest,
   getUserInfoById,
@@ -19,7 +19,8 @@ export const useLogin = defineStore('login', {
     return {
       token: '',
       userInfo: null,
-      userMenu: <any[]>[]
+      userMenu: <any[]>[],
+      permissions: <any[]>[]
     }
   },
   getters: {},
@@ -41,6 +42,7 @@ export const useLogin = defineStore('login', {
       this.userMenu = userMenuResponse.data
       localCache.setCache('userMenu', this.userMenu)
       this._registerDynamicRoutes(this.userMenu)
+      this._getPermissions(this.userMenu)
 
       // 跳到首页
       router.push('/main')
@@ -58,6 +60,7 @@ export const useLogin = defineStore('login', {
       if (userMenu) {
         this.userMenu = userMenu
         this._registerDynamicRoutes(userMenu)
+        this._getPermissions(userMenu)
       }
     },
     _registerDynamicRoutes(userMenu: any[]) {
@@ -67,6 +70,10 @@ export const useLogin = defineStore('login', {
       routes.forEach((route) => {
         router.addRoute('Main', route)
       })
+    },
+    _getPermissions(userMenu: any[]) {
+      // 获取用户按钮权限
+      this.permissions = mapMenuToPermission(userMenu)
     }
   }
 })

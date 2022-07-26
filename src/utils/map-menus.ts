@@ -71,4 +71,22 @@ export function mapPathToDefaultMenu(
   }
 }
 
+export function mapMenuToPermission(userMenu: any[]) {
+  const permissions: string[] = []
+
+  const traverse = function (menus: any[]) {
+    for (const menu of menus) {
+      if (menu.type === 1 || menu.type === 2) {
+        traverse(menu.children ?? [])
+      } else {
+        permissions.push(menu.permission)
+      }
+    }
+  }
+
+  traverse(userMenu)
+
+  return permissions
+}
+
 export { firstMenu }
