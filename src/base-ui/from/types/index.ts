@@ -6,8 +6,11 @@ export interface FormItem {
   label: string
   rules?: any[]
   placeholder?: any
+  // select
   options?: any[]
+  // 特殊属性
   otherOptions?: any
+  isHidden?: boolean
 }
 
 export interface Form {

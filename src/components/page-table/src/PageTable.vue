@@ -8,7 +8,9 @@
     >
       <!-- header slot -->
       <template #header-handler>
-        <el-button v-if="isCreate" type="primary">新建</el-button>
+        <el-button v-if="isCreate" type="primary" @click="handleNewClick">
+          新建
+        </el-button>
         <el-button type="primary">刷新</el-button>
       </template>
 
@@ -39,7 +41,13 @@
 
       <template #handler="scope">
         <div class="hanle-btns">
-          <el-button v-if="isUpdate" size="small" type="primary" text>
+          <el-button
+            v-if="isUpdate"
+            size="small"
+            type="primary"
+            text
+            @click="handleEditClick(scope.row)"
+          >
             <el-icon><Edit /></el-icon>
             编辑
           </el-button>
@@ -95,7 +103,7 @@ const props = defineProps({
   }
 })
 
-const emit = defineEmits(['handlePageChange'])
+const emit = defineEmits(['handlePageChange', 'newBtnClick', 'editBtnClick'])
 
 // 请求地址
 const pageUrl = `/${props.pageName}/list`
@@ -153,6 +161,12 @@ const handleDelete = async (item: any) => {
   const url = `/${props.pageName}/${item.id}`
   await deletePageData(url)
   await getPageData(systemStore.queryInfo)
+}
+const handleNewClick = () => {
+  emit('newBtnClick')
+}
+const handleEditClick = (item: any) => {
+  emit('editBtnClick', item)
 }
 </script>
 
