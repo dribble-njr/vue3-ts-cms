@@ -34,7 +34,9 @@
           </span>
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>退出登录</el-dropdown-item>
+              <el-dropdown-item @click="handleExitClick">
+                退出登录
+              </el-dropdown-item>
               <el-dropdown-item>用户信息</el-dropdown-item>
               <el-dropdown-item>系统管理</el-dropdown-item>
             </el-dropdown-menu>
@@ -51,6 +53,9 @@ import { useLogin } from '@/stores/login'
 import { useLang } from '@/stores/lang'
 import { useRoute } from 'vue-router'
 import { mapPathToBreadcrumb } from '@/utils/map-menus'
+
+import localCache from '@/utils/cache'
+import router from '@/router'
 
 // 折叠 aside
 const isFold = ref(false)
@@ -82,6 +87,12 @@ const changeLang = function () {
 // 用户
 const loginStore = useLogin()
 const name = loginStore.userInfo ? loginStore.userInfo['name'] : ''
+
+// 退出登录
+const handleExitClick = () => {
+  localCache.deleteCache('token')
+  router.push('/main')
+}
 </script>
 
 <style scoped lang="less">
