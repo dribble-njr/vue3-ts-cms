@@ -34,6 +34,8 @@ export function mapMenuToRoutes(userMenu: any[]): RouteRecordRaw[] {
     }
   }
 
+  console.log(userMenu)
+
   traverse(userMenu)
 
   return routes
