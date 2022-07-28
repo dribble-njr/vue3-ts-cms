@@ -64,7 +64,7 @@ const editCallback = () => {
 
 // 2.动态添加部门和角色列表
 const systemStore = useSystem()
-await systemStore.getInitialData()
+// await systemStore.getInitialData()
 const modalConfigRef = computed(() => {
   const departmentItem = modalConfig.formItems.find(
     (item) => item.field === 'departmentId'

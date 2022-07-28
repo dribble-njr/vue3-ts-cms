@@ -1,6 +1,8 @@
 import { defineStore } from 'pinia'
 import router from '@/router'
 
+import { useSystem } from './system'
+
 import localCache from '@/utils/cache'
 import { mapMenuToRoutes, mapMenuToPermission } from '@/utils/map-menus'
 import {
@@ -47,7 +49,7 @@ export const useLogin = defineStore('login', {
       // 跳到首页
       router.push('/main')
     },
-    $loadLocalLogin() {
+    async $loadLocalLogin() {
       const token = localCache.getCache('token')
       if (token) {
         this.token = token
@@ -62,6 +64,8 @@ export const useLogin = defineStore('login', {
         this._registerDynamicRoutes(userMenu)
         this._getPermissions(userMenu)
       }
+
+      await useSystem().getInitialData()
     },
     _registerDynamicRoutes(userMenu: any[]) {
       // 动态添加路由

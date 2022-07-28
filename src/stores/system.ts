@@ -35,6 +35,8 @@ export const useSystem = defineStore('system', {
       this.entireDepartment = departmentList
       this.entireRole = roleList
       this.entireMenu = menuList
+
+      console.log(this.entireDepartment)
     }
   }
 })

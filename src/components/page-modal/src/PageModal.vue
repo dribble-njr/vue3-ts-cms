@@ -65,14 +65,14 @@ defineExpose({
 
 const emit = defineEmits(['newOrEdit'])
 // 点击确定按钮的逻辑
-const handleConfirmClick = () => {
+const handleConfirmClick = async () => {
   dialogVisible.value = false
 
   if (Object.keys(props.defaultInfo).length) {
     // 编辑
     console.log('编辑用户')
     const pageUrl = `/${props.pageName}/${props.defaultInfo.id}`
-    editPageData(pageUrl, {
+    await editPageData(pageUrl, {
       ...formData.value,
       ...props.otherInfo
     })
@@ -80,7 +80,7 @@ const handleConfirmClick = () => {
     // 新建
     console.log('新建用户')
     const pageUrl = `/${props.pageName}`
-    createPageData(pageUrl, {
+    await createPageData(pageUrl, {
       ...formData.value,
       ...props.otherInfo
     })
